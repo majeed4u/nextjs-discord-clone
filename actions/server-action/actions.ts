@@ -1,14 +1,19 @@
+'use server';
+import { ServerSchema, serverSchema } from '.';
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { MemberRole } from '@prisma/client';
-import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-export async function POST(req: Request) {
+export async function createServer(inputs: ServerSchema) {
+  const result = serverSchema.safeParse(inputs);
+  if (!result.success) {
+    throw new Error(result.error.message);
+  }
   try {
-    const { name, imageUrl } = await req.json();
+    const { name, imageUrl } = result.data;
     const profile = await currentProfile();
     if (!profile) {
-      return new NextResponse('Unauthorized', { status: 401 });
+      throw new Error('Unauthorized');
     }
     const server = await db.server.create({
       data: {
@@ -34,11 +39,9 @@ export async function POST(req: Request) {
         },
       },
     });
-    return NextResponse.json(server, {
-      status: 201,
-    });
+    return server;
   } catch (error) {
     console.log('[Server_POST]', error);
-    return new NextResponse('Internal Server Error', { status: 500 });
+    throw new Error('Internal Server Error');
   }
 }

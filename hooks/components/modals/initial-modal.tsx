@@ -58,9 +58,7 @@ export default function InitialModal() {
       console.log(error);
     }
   };
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <Dialog open>
@@ -119,7 +117,7 @@ export default function InitialModal() {
             </div>
 
             <DialogFooter className='px-6 py-4 bg-gray-100 '>
-              <Button type='submit' disabled={isLoading} variant='default'>
+              <Button type='submit' disabled={isLoading} variant='primary'>
                 Create
               </Button>
             </DialogFooter>

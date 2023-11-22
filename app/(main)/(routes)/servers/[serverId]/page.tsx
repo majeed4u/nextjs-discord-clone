@@ -6,5 +6,5 @@ interface ServerPageProps {
   };
 }
 export default function ServerPage({ params }: ServerPageProps) {
-  return <div>ServerPage</div>;
+  return <div>ServerIdsPage</div>;
 }
